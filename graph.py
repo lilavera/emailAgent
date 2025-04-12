@@ -1,5 +1,3 @@
-# graph.py
-
 from langgraph.graph import StateGraph, END
 from langchain_core.runnables import RunnableLambda
 from agent2 import (
@@ -10,8 +8,6 @@ from agent2 import (
     route_by_category
 )
 
-# Define initial state
-initial_state = {}
 
 # Build the graph
 workflow = StateGraph(dict)
@@ -39,6 +35,6 @@ app = workflow.compile()
 
 # Run it!
 if __name__ == "__main__":
-    final_state = app.invoke(initial_state)
+    final_state = app.invoke({})
     print("\n✅ Final State:")
     print(final_state)
