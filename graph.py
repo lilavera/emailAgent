@@ -16,8 +16,7 @@ initial_state = {}
 # Build the graph
 workflow = StateGraph(dict)
 
-workflow.add_node("get_and_categorize", RunnableLambda(
-    get_and_categorize_email_node))
+workflow.add_node("get_and_categorize", RunnableLambda(get_and_categorize_email_node))
 workflow.add_node("create_draft", RunnableLambda(create_draft_node))
 workflow.add_node("send_email", RunnableLambda(send_email_node))
 workflow.add_node("no_send", RunnableLambda(no_send_node))
