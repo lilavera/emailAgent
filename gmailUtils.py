@@ -2,8 +2,7 @@ from langchain_google_community import GmailToolkit
 import openai
 
 
-toolkit = GmailToolkit()
+toolkit = GmailToolkit(force_refresh=True)
 
 
-tools = toolkit.get_tools()
-
+mailTools = toolkit.get_tools()

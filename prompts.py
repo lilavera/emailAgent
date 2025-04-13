@@ -10,6 +10,7 @@ Your expertise lies in understanding customer intent and categorizing emails to 
 2. Use the following rules to assign the correct category:
    - **customer_complaint**: When the email communicates complaint or dissatisfaction.
    - **customer_feedback**: When the email contains suggestions or feedback.
+   - **information about products**: When the email contains questions about the functionality of out product.
    - **unrelated**: When the email content does not match any of the above categories.
 
 ---
@@ -17,6 +18,7 @@ Your expertise lies in understanding customer intent and categorizing emails to 
 # **Notes:**
 
 * Base your categorization strictly on the email content provided; avoid making assumptions or overgeneralizing. Answer clearly.
+* If you need additional technical context about AI agents, you can use the internal knowledge base tool available to you.
 Just give the answer about category with the words "this email referrs to **name_of_category** category"
 """
 
@@ -42,7 +44,9 @@ of the latest unread email.
 Choose appropriate tone of email based on the category for which it's related:
    - **customer_complaint**: Express empathy, assure the customer their concerns are valued, and promise to do your best to resolve the issue.  
    - **customer_feedback**: Thank the customer for sharing their thoughts and let them know their feedback is valued.  
-   - **unrelated**: Ask the customer for more information and assure them of your willingness to help.  
+   - **unrelated**: Ask the customer for more information and assure them of your willingness to help. 
+   - **information about products**: Give information which will help to answer frequently asked question to customer. Let customer know that he/she is welcome to ask other questions
+ 
 
 """
 

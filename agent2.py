@@ -1,9 +1,8 @@
-# agent.py
-
+from rag_tools import rag_tool
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_openai import ChatOpenAI
 from langgraph.prebuilt import chat_agent_executor
-from gmailUtils import tools
+from gmailUtils import mailTools
 from dotenv import load_dotenv
 import os
 import openai
@@ -13,7 +12,7 @@ from prompts import *
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-tools = [*tools]
+tools = [*mailTools, rag_tool]
 model = ChatOpenAI(model="gpt-4o")
 executor = chat_agent_executor.create_tool_calling_executor(model, tools)
 
