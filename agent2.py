@@ -28,7 +28,7 @@ def get_and_categorize_email_node(state):
     print("📥 Getting and categorizing email...")
     result = run_prompt(GET_AND_CATEGORIZE_EMAIL_PROMPT)
     match = re.findall(r"\*\*(.*?)\*\*", result[1])
-    print(match)
+    # print(match)
     state["category"] = match
     return state
 
@@ -38,14 +38,14 @@ def create_draft_node(state):
     category = state["category"]
     prompt = CREATE_DRAFT_PROMPT.format(category=category)
     result = run_prompt(prompt)
-    state["draft"] = result[2]
+    state["draft"] = result
     return state
 
 
 def send_email_node(state):
     print("📤 Sending email...")
     result = run_prompt(SEND_THE_EMAIL_PROMPT)
-    state["sent"] = result[3]
+    state["sent"] = result
     return state
 
 
