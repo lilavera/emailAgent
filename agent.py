@@ -1,62 +1,47 @@
 import openai
 from dotenv import load_dotenv
 import os
-from gmailUtils import tools
+from gmailUtils import mailTools
 from langchain_openai import ChatOpenAI
-from langchain_core.messages import HumanMessage,SystemMessage
+from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 from langgraph.prebuilt import chat_agent_executor
 from prompts import *
 from langchain.prompts import PromptTemplate
+import re
 
 
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-
-tools = [*tools]
-
+mailTools = [*mailTools]
 
 model = ChatOpenAI(model="gpt-4o")
 
-agent_executor = chat_agent_executor.create_tool_calling_executor(model, tools)
+
+def agent_executor(prompt):
+    response = chat_agent_executor.create_tool_calling_executor(model, mailTools).invoke(
+        {"messages": [HumanMessage(content=prompt)]})
+    # print(response)
+    ai_response = [msg.content for msg in response["messages"]
+                   if isinstance(msg, AIMessage)]
+    print(ai_response)
+    return ai_response
 
 
-# def get_latest_inbox_messages(agent_executor):
-#     try:
-#         response = agent_executor.invoke({"messages": [HumanMessage(
-#             content="This is an email box of AI company NewRobot. Get latest unread incoming message from my inbox")]})
-#         return response
-#     except Exception as e:
-#         print(f"An error occurred: {e}")
-#         return None 
-    
-def get_and_categorize_email(agent_executor):
-     categorize_prompt = PromptTemplate(template=GET_AND_CATEGORIZE_EMAIL_PROMPT).format()
-     response = agent_executor.invoke({
-         "messages": [HumanMessage(
-             content=categorize_prompt)]
-     })
-     return response
- 
-def create_draft(agent_executor):
-     create_draft_prompt = PromptTemplate(template=CREATE_DRAFT_PROMPT).format()
-     response = agent_executor.invoke({
-         "messages": [HumanMessage(
-             content=create_draft_prompt)]
-     })
-     return response
- 
-def send_email(agent_executor):
-    response = agent_executor.invoke({
-        "messages": [SystemMessage(
-            content="Send the latest draft email")]
-    })
-    return response
+def get_and_categorize_email():
+    # categorize_prompt = PromptTemplate(template=GET_AND_CATEGORIZE_EMAIL_PROMPT).format()
+    result = agent_executor(GET_AND_CATEGORIZE_EMAIL_PROMPT)
+    return result
 
 
 # Example usage:
-category = get_and_categorize_email(agent_executor)
-#create_draft_message = create_draft(agent_executor)
-#send_message = send_email(agent_executor)
+categorize = agent_executor(PromptTemplate(
+    template=GET_AND_CATEGORIZE_EMAIL_PROMPT).format())
+defined_email_category = re.findall(r"\*\*(.*?)\*\*", categorize[1])
 
-print(category["messages"])
+
+formatted_prompt = CREATE_DRAFT_PROMPT.format(category=defined_email_category)
+
+create_draft_message = agent_executor(formatted_prompt)
+send_message = agent_executor(PromptTemplate(
+    template=SEND_THE_EMAIL_PROMPT).format())
