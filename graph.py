@@ -1,6 +1,6 @@
 from langgraph.graph import StateGraph, END
 from langchain_core.runnables import RunnableLambda
-from agent2 import (
+from agent import (
     get_and_categorize_email_node,
     create_draft_node,
     send_email_node,
